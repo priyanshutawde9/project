@@ -1,0 +1,26 @@
+from django.db import models
+from django.utils import timezone
+
+# Create your models here.
+class Folder(models.Model):
+    status_choices = [
+        ("Active", "Active"),
+        ("Draft", "Draft"),
+        ("Bin","Bin"),
+     ]
+    state = models.CharField(choices=status_choices,default="Active")
+    name = models.FileField(upload_to="files", max_length=100)
+    content = models.CharField(max_length=50)
+    size = models.IntegerField(default=10)
+    created = models.DateTimeField(default=timezone.now)
+    delete_flag = models.BooleanField(default=False)
+
+class Folder1(models.Model):
+    name = models.CharField(max_length=100)
+    files = models.ManyToManyField(Folder)
+    state_choices = [
+        ("Active", "Active"),
+        ("Draft", "Draft"),
+        ("Bin", "Bin"),
+    ]
+    state = models.CharField(choices=state_choices, default="Active")
