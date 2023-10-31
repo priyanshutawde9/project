@@ -1,0 +1,33 @@
+from rest_framework import serializers
+from .models import Folder
+
+class FolderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Folder
+        fields = '__all__'   
+
+        
+    def create(self, validated_data):
+        return Folder.objects.create(**validated_data)
+     
+
+    name = serializers.FileField(required=True)
+    content = serializers.CharField(required=True)
+    size = serializers.IntegerField(required=True)
+    created = serializers.DateTimeField(default=True) 
+    delete_flag = serializers.BooleanField(default=False)
+
+
+    
+    def validate_name(self, value):
+            if Folder.objects.filter(name=value).exists():
+                raise serializers.ValidationError("A folder with this name already exists.")
+            return value
+    
+class UserSerializer(serializers.Serializer):
+     username = serializers.CharField(max_length=255)
+     password = serializers.CharField(max_length=150)
+    
+    
+
+
